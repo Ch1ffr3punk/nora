@@ -7,5 +7,5 @@ other. It doesn't matter which time zones they are
 currently in.
 
 This program is intended for the use of my [ChaCha20](https://github.com/Ch1ffr3punk/chacha20) program,
-which requires nonces, in addition to the use of a 256 bit key.
+which requires 12 bytes hex nonces, in addition to the use of a 32 bytes hex key.
 
