@@ -6,7 +6,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"time"
@@ -24,7 +23,7 @@ func generateNonce(r io.Reader, length int) (string, error) {
 }
 
 func main() {
-	lengthPtr := flag.Int("l", 16, "the length of the nonce")
+	lengthPtr := flag.Int("l", 12, "the length of the nonce")
 	passwordPtr := flag.String("p", "", "the password")
 	noncePtr := flag.Int("n", 1, "the number of nonces to be generated")
 	savePtr := flag.Bool("s", false, "save nonces to files")
@@ -34,9 +33,10 @@ func main() {
 
 	flag.Parse()
 
+	// Überprüfe ob das Passwort-Flag gesetzt wurde
 	if *passwordPtr == "" {
-		fmt.Println("Usage: -p <password> [-salt <salt>] [-b party B] [-n number of nonces] \n          [-l length of the nonce] [-s save nonces] [-r YYYY-MM-DD]")
-		return
+		fmt.Println("Usage: -p <password> [-salt salt] [-b party B] [-n number of nonces] \n       [-l length of the nonce] [-s save nonces] [-r YYYY-MM-DD]")
+		os.Exit(1)
 	}
 
 	dir, err := os.Getwd()
@@ -88,12 +88,14 @@ func main() {
 		}
 		fmt.Printf("%d: %s %s\n", i+1, value, date)
 
+		// Nur schreiben, wenn -s Flag gesetzt ist
 		if *savePtr {
 			filename := fmt.Sprintf("n-%d", i+1)
-			err := ioutil.WriteFile(filepath.Join(dir, filename), []byte(value), 0600)
+			err := os.WriteFile(filepath.Join(dir, filename), []byte(value), 0600)
 			if err != nil {
 				fmt.Printf("Failed to write nonce to file: %v\n", err)
 			}
 		}
 	}
 }
+

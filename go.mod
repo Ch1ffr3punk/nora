@@ -1,5 +1,5 @@
 module nora
 
-go 1.23.3
+go 1.25.0
 
-require golang.org/x/crypto v0.29.0
+require golang.org/x/crypto v0.43.0
